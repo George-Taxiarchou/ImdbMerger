@@ -12,10 +12,6 @@ def yield_tsv(file):
     yield field
 
 value = []
-# for value in yield_tsv(tsvfile1):
-#     continue
-# for value in yield_tsv(tsvfile2):
-#     continue
 next(yield_tsv(tsvfile1))
 next(yield_tsv(tsvfile2))
 
@@ -24,13 +20,9 @@ def mergeByID(file,ID):
     global temparray
     mergefilearray=[]
     pointer = ''
-    # for value in yield_tsv(file):
     value = next(yield_tsv(file))
     while value[0] == ID:
         temparray.append(value)
-
-        # for value in yield_tsv(file):
-        #     continue
         value = next(yield_tsv(file))
     else:
         flag = 0
@@ -50,7 +42,6 @@ def mergeByID(file,ID):
                 print(temparray[i][2]+"("+temparray[i][3]+")")
 
         mergedoutput.writerow(mergefilearray)
-
         temparray = []
         temparray.append(value)
 
@@ -67,7 +58,6 @@ if __name__ == "__main__":
 
 
     while value!=last_line:
-        # for value in yield_tsv(tsvfile1):
             value = next(yield_tsv(tsvfile1))
             print("\t"+value[0])
             print(value[2]+"\t")
