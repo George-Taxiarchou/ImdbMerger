@@ -20,31 +20,55 @@ value2=next(scan(tsvfile2))
 temparray1 = []
 temparray2 = []
 mergearray = []
-
+next1 = []
+next2 = []
+kappa=0
 def mj(scan1,scan2,list1,list2):
-    # print "kek"
+    global kappa
     global value1
     global value2
-    global mergearray
     global temparray1,temparray2
 
-    value2 = next(scan2)
-    temparray2.append(value2)
-    while True:
+    while 1:
+
         if(len(list1)==1 and len(list2)==2):
-            # print "lel"
-            if(value1[0]==value2[0]):
-                yield (value1[0]+"\t"+value1[list1[0]]+"\t"+value2[list2[0]]+"\t"+value2[list2[1]])
-                # value2 = next(scan2)
-            else:
-                value1 = next(scan1)
+            if(len(temparray1)==0):
+                val = next(scan1)
+                temparray1.append(val)
+            val = next(scan1)
+            while(temparray1[0][0]==val[0]):
+                temparray1.append(val)
+                val = next(scan1)
+
+            # if(len(temparray2)==0):
+            #     val2 = next(scan2)
+            #     temparray2.append(val2)
+            # val2 = next(scan2)
+            # while(temparray2[0][0]==val2[0]):
+            #     temparray2.append(val2)
+            #     val2 = next(scan2)
+            # else:
+            #     if(temparray1[0][0]==temparray2[0][0]):
+            #         print temparray1
+            #         print "\n"
+            #         print temparray2
+            #         temparray2 = []
+            #         temparray2.append(val2)
+            #
+            # temparray1 = []
+            # temparray1.append(val)
+            # exit(0)
+            yield temparray1
+            # temparray1 = []
+
+
 
 
 
 
 
 if __name__ == "__main__":
-
+    # mj(scan(tsvfile2),scan(tsvfile1),[2],[1,2])
     print(next(mj(scan(tsvfile2),scan(tsvfile1),[2],[1,2])))
     print(next(mj(scan(tsvfile2),scan(tsvfile1),[2],[1,2])))
     print(next(mj(scan(tsvfile2),scan(tsvfile1),[2],[1,2])))
