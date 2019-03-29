@@ -1,8 +1,6 @@
 import numpy as np
 import csv
 
-tsvfile1 = open("title.basics.tsv","r")
-tsvfile2 = open("title.akas.tsv","r")
 mergedtsvfile = open("title.merged.tsv","w")
 mergedoutput = csv.writer(mergedtsvfile,delimiter = '\t')
 
@@ -11,19 +9,14 @@ def yield_tsv(file):
     field = [f.strip() for f in field]
     yield field
 
-value = []
-next(yield_tsv(tsvfile1))
-next(yield_tsv(tsvfile2))
-
-temparray = []
-def mergeByID(file,ID):
-    global temparray
+def mergeByID(tsvfile1value,file,ID):
+    temparray = []
     mergefilearray=[]
     pointer = ''
-    value = next(yield_tsv(file))
-    while value[0] == ID:
-        temparray.append(value)
-        value = next(yield_tsv(file))
+    tsvfile1value = next(yield_tsv(file))
+    while tsvfile1value[0] == ID:
+        temparray.append(tsvfile1value)
+        tsvfile1value = next(yield_tsv(file))
     else:
         flag = 0
         for i in range(len(temparray)) :
@@ -33,6 +26,7 @@ def mergeByID(file,ID):
                     temparray[i][3]+=","+temparray[j][3]
                 if(i!=j and temparray[i][2] == temparray[j][2] and flag==1):
                     pointer = i
+                    #pointer to not print joined items second time in array
 
         for i in range(len(temparray)):
             if(i==pointer):
@@ -43,28 +37,35 @@ def mergeByID(file,ID):
 
         mergedoutput.writerow(mergefilearray)
         temparray = []
-        temparray.append(value)
+        temparray.append(tsvfile1value)
 
+def main():
+    tsvfile1 = open("title.basics.tsv","r")
+    tsvfile2 = open("title.akas.tsv","r")
+    #skip first line of files with names
+    next(yield_tsv(tsvfile1))
+    next(yield_tsv(tsvfile2))
+    tsvfile1value = [] #value that is being read in file 1 at the moment (primaryTitle)
 
-
-if __name__ == "__main__":
     with open('title.basics.tsv', 'r') as f:
-        lines = f.read().splitlines()
-        last_line = lines[-1].split("\t")
+        lines = f.read().splitlines()     #hold the last line of file to exit()
+        last_line = lines[-1].split("\t")   #when we yield the last result
     f.close()
 
     outputarrayformat = ["titleId","primaryTitle","title(regions)"]
     mergedoutput.writerow(outputarrayformat)
 
-
-    while value!=last_line:
-            value = next(yield_tsv(tsvfile1))
-            print("\t"+value[0])
-            print(value[2]+"\t")
-            mergedtsvfile.write(value[0]+"\t"+value[2]+"\t")
-            mergeByID(tsvfile2,value[0])
+    while tsvfile1value!=last_line:
+            tsvfile1value = next(yield_tsv(tsvfile1))
+            print("\t"+tsvfile1value[0])
+            print(tsvfile1value[2]+"\t")
+            mergedtsvfile.write(tsvfile1value[0]+"\t"+tsvfile1value[2]+"\t")
+            mergeByID(tsvfile1value,tsvfile2,tsvfile1value[0])
             print("-----------------------------")
 
     tsvfile1.close()
     tsvfile2.close()
     mergedtsvfile.close()
+
+if __name__ == "__main__":
+    main()
