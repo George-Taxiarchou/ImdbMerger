@@ -14,52 +14,46 @@ def scan(file):
         field = [f.strip() for f in field]
         yield field
 
-value1=next(scan(tsvfile1))
-value2=next(scan(tsvfile2))
+value2=next(scan(tsvfile1))
+value1=next(scan(tsvfile2))
 
 temparray1 = []
 temparray2 = []
-mergearray = []
-next1 = []
-next2 = []
-kappa=0
+
+nextval = []
+kappa = 0
 def mj(scan1,scan2,list1,list2):
+
+    global temparray1
     global kappa
-    global value1
-    global value2
-    global temparray1,temparray2
+    global temparray2
 
-    while 1:
-
+    while True:
         if(len(list1)==1 and len(list2)==2):
-            if(len(temparray1)==0):
+            if(len(temparray1)==0 and kappa==0):
                 val = next(scan1)
                 temparray1.append(val)
+            if(len(temparray1)==0 and len(temparray2)!=0):
+                temparray1.append(temparray2[0])
+                temparray2 = []
+
             val = next(scan1)
             while(temparray1[0][0]==val[0]):
                 temparray1.append(val)
                 val = next(scan1)
+            else:
+                temparray2.append(val)
 
-            # if(len(temparray2)==0):
-            #     val2 = next(scan2)
-            #     temparray2.append(val2)
-            # val2 = next(scan2)
-            # while(temparray2[0][0]==val2[0]):
-            #     temparray2.append(val2)
-            #     val2 = next(scan2)
-            # else:
-            #     if(temparray1[0][0]==temparray2[0][0]):
-            #         print temparray1
-            #         print "\n"
-            #         print temparray2
-            #         temparray2 = []
-            #         temparray2.append(val2)
-            #
-            # temparray1 = []
-            # temparray1.append(val)
-            # exit(0)
-            yield temparray1
-            # temparray1 = []
+            # print val
+            # val = next(scan1)
+
+        print temparray1
+        kappa+=1
+        if(kappa == 6):
+            exit(0)
+        temparray1=[]
+
+
 
 
 
@@ -68,8 +62,8 @@ def mj(scan1,scan2,list1,list2):
 
 
 if __name__ == "__main__":
-    # mj(scan(tsvfile2),scan(tsvfile1),[2],[1,2])
     print(next(mj(scan(tsvfile2),scan(tsvfile1),[2],[1,2])))
-    print(next(mj(scan(tsvfile2),scan(tsvfile1),[2],[1,2])))
-    print(next(mj(scan(tsvfile2),scan(tsvfile1),[2],[1,2])))
-    print(next(mj(scan(tsvfile2),scan(tsvfile1),[2],[1,2])))
+    # print(next(mj(scan(tsvfile2),scan(tsvfile1),[2],[1,2])))
+    # print(next(mj(scan(tsvfile2),scan(tsvfile1),[2],[1,2])))
+    # print(next(mj(scan(tsvfile2),scan(tsvfile1),[2],[1,2])))
+    # print(next(mj(scan(tsvfile2),scan(tsvfile1),[2],[1,2])))
