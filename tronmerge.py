@@ -1,4 +1,3 @@
-import numpy as np
 import csv
 
 mergedtsvfile = open("title.merged.tsv","w")
