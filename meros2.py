@@ -103,8 +103,8 @@ def main():
         print("------------------------------------------------------------")
         FIRSTROWPRINT = 1
 
-    while True:
-    # for i in range(0,10):
+    # while True:
+    for i in range(0,10):
         print(next(mygen))
 
     tsvfile1.close()

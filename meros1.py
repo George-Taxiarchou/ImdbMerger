@@ -8,14 +8,14 @@ def yield_tsv(file):
     field = [f.strip() for f in field]
     yield field
 
-def mergeByID(tsvfile1value,file,ID):
+def mergeByID(file,ID):
     temparray = []
     mergefilearray=[]
     pointer = ''
-    tsvfile1value = next(yield_tsv(file))
-    while tsvfile1value[0] == ID:
-        temparray.append(tsvfile1value)
-        tsvfile1value = next(yield_tsv(file))
+    mergevalue = next(yield_tsv(file))
+    while mergevalue[0] == ID:
+        temparray.append(mergevalue)
+        mergevalue = next(yield_tsv(file))
     else:
         flag = 0
         for i in range(len(temparray)) :
@@ -36,7 +36,7 @@ def mergeByID(tsvfile1value,file,ID):
 
         mergedoutput.writerow(mergefilearray)
         temparray = []
-        temparray.append(tsvfile1value)
+        temparray.append(mergevalue)
 
 def main():
     tsvfile1 = open("title.basics.tsv","r")
@@ -44,7 +44,7 @@ def main():
     #skip first line of files with names
     next(yield_tsv(tsvfile1))
     next(yield_tsv(tsvfile2))
-    tsvfile1value = [] #value that is being read in file 1 at the moment (primaryTitle)
+    mergevalue = [] #value that is being read in file 1 at the moment (primaryTitle)
 
     with open('title.basics.tsv', 'r') as f:
         lines = f.read().splitlines()     #hold the last line of file to exit()
@@ -54,12 +54,12 @@ def main():
     outputarrayformat = ["titleId","primaryTitle","title(regions)"]
     mergedoutput.writerow(outputarrayformat)
 
-    while tsvfile1value!=last_line:
-            tsvfile1value = next(yield_tsv(tsvfile1))
-            print("\t"+tsvfile1value[0])
-            print(tsvfile1value[2]+"\t")
-            mergedtsvfile.write(tsvfile1value[0]+"\t"+tsvfile1value[2]+"\t")
-            mergeByID(tsvfile1value,tsvfile2,tsvfile1value[0])
+    while mergevalue!=last_line:
+            mergevalue = next(yield_tsv(tsvfile1))
+            print("\t"+mergevalue[0])
+            print(mergevalue[2]+"\t")
+            mergedtsvfile.write(mergevalue[0]+"\t"+mergevalue[2]+"\t")
+            mergeByID(tsvfile2,mergevalue[0])
             print("-----------------------------")
 
     tsvfile1.close()
